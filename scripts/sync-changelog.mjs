@@ -64,10 +64,14 @@ const body = releases
   .map((r) => {
     const date = fmtDate(r.version);
     const bumps = r.sections.map((s) => s.bump.toLowerCase());
+    // A version can be in CHANGELOG.md before it reaches npm: `changeset version` writes the entry,
+    // `changeset publish` does the publishing. Until then there is no date and no page to link to, so
+    // say that rather than linking somewhere that 404s.
+    const published = Boolean(dates[r.version]);
     const meta = [
-      date,
+      published ? date : 'not yet published',
       bumps.length ? `${[...new Set(bumps)].join(' and ')} release` : null,
-      `[on npm](https://www.npmjs.com/package/${PKG}/v/${r.version})`,
+      published ? `[on npm](https://www.npmjs.com/package/${PKG}/v/${r.version})` : null,
     ]
       .filter(Boolean)
       .join(' · ');
