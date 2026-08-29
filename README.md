@@ -116,15 +116,19 @@ string `src` when `images.unoptimized` is on — which it must be for a static e
 resolves against the domain root and 404s under `/docs`. A static import (or a markdown `![]()`,
 which fumadocs turns into one) is hashed into `/_next/static/media/` with the prefix applied.
 
-`src/lib/shared.ts` exports `withBasePath()` for the handful of APIs that insist on a string. Current
-callers: `metadata.icons`, and `getPageMarkdownUrl` in `src/lib/source.ts`, which feeds the page's
-"View as Markdown" and "Copy Markdown" actions. Fumadocs applies a base path of its own to that URL,
-but it reads `import.meta.env.BASE_URL` — a Vite convention Next does not set — so it is a no-op and
-ours is the one that counts.
+`src/lib/shared.ts` exports `withBasePath()` for the few places that need the prefix applied by hand.
+Knowing which those are matters, because getting it wrong in either direction 404s:
 
-**`getPageImageUrl` is deliberately not prefixed.** It only ever reaches
-`metadata.openGraph.images`, which Next resolves against `metadataBase`, and that already carries the
-prefix. Prefixing it too yields `/docs/docs/og/...`.
+| URL                                           | Prefixed by | Why                                                                                                                  |
+| --------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| `metadata.icons` (favicon)                    | **us**      | Next does not prefix metadata icon paths.                                                                            |
+| the search index, `src/components/search.tsx` | **us**      | `staticClient` prefixes only its _default_ endpoint; an explicit `from` is used verbatim.                            |
+| `getPageMarkdownUrl`                          | fumadocs    | Its page actions run the URL through their own `withBasePath` before fetching or linking it.                         |
+| `getPageImageUrl`                             | Next        | It only reaches `metadata.openGraph.images`, resolved against `metadataBase`, whose path already carries the prefix. |
+
+Next defines `import.meta.env.BASE_URL` from `basePath`, which is what fumadocs reads — so anything
+that goes through a fumadocs component is already handled, and prefixing it again yields
+`/docs/docs/...`.
 
 **Known gap:** the popover's _Open in ChatGPT_ / _Open in Claude_ items build their URL from
 `usePathname()` inside fumadocs, which strips the base path, so they point one level too high. It is

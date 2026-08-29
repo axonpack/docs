@@ -19,10 +19,8 @@ import { usePathname } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { searchTags } from '@/lib/packages';
 
-// Empty on the current deployment, which serves from a domain root. It is built by hand anyway
-// because fumadocs reads its own base path from `import.meta.env.BASE_URL`, a Vite convention Next
-// does not set — so the day the site moves under a subpath, this would silently fetch the index from
-// the wrong origin and every search would come back empty.
+// `staticClient` only applies its own base path to the *default* endpoint; an explicit `from` is used
+// verbatim. So this one has to carry the prefix itself.
 const searchIndexUrl = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/search.json`;
 
 const tagValues = new Set(searchTags.map((tag) => tag.value));

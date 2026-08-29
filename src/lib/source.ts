@@ -1,6 +1,6 @@
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
-import { docsContentRoute, docsImageRoute, docsRoute, withBasePath } from './shared';
+import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
 import { defineDocs } from 'fumadocs-mdx/macro';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 
@@ -41,7 +41,10 @@ export function getPageMarkdownUrl(page: (typeof source)['$inferPage']) {
 
   return {
     segments,
-    url: withBasePath('/' + [page.locale, ...docsContentRoute.split('/'), ...segments].filter(Boolean).join('/')),
+    // Deliberately *not* prefixed. Next defines `import.meta.env.BASE_URL` from `basePath`, and
+    // fumadocs' page actions run this URL through their own `withBasePath` before fetching or
+    // linking it. Prefixing here as well produces /docs/docs/llms.mdx/...
+    url: '/' + [page.locale, ...docsContentRoute.split('/'), ...segments].filter(Boolean).join('/'),
   };
 }
 
