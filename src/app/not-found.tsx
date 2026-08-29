@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { shippedPackages } from '@/lib/packages';
+import { packages } from '@/lib/packages';
 
 // A static export serves this as 404.html, which is what GitHub Pages hands back for any unknown
 // path — so it is the only page a mistyped or stale URL ever reaches.
@@ -25,7 +25,7 @@ export default function NotFound() {
             Start from the introduction
           </Link>
         </li>
-        {shippedPackages.map((pkg) => (
+        {packages.map((pkg) => (
           <li key={pkg.slug}>
             <Link className="underline" href={`/${pkg.slug}`}>
               {pkg.name}

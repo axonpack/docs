@@ -59,9 +59,10 @@ introduction, which is the site's front page.
 Copy the shape of `content/docs/expo-devtools/` — `---Get started---` / `---Guides---` /
 `---Shipping---` separators, then a `reference/` subfolder that collapses in the sidebar.
 
-A **planned** package gets an entry in `packages.ts` with `status: 'planned'` and nothing else.
-`<PackageCards />` states it rather than linking it, and it gets no folder and no sidebar entry — a
-link that goes nowhere reads as a broken one.
+**This site documents only what is published.** A planned package gets no entry in `packages.ts`, no
+folder, no card and no mention — it earns those on the day it goes to npm. Documentation is a promise
+that something works as described, and a page for a package nobody can install is a promise with
+nothing behind it. Unshipped work belongs in the monorepo's `notes/plan.md`.
 
 ## Where the rest lives
 

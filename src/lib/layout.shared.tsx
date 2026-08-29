@@ -1,7 +1,7 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Image from 'next/image';
 import logo from '../../public/logo.png';
-import { shippedPackages } from './packages';
+import { packages } from './packages';
 import { appName, gitConfig } from './shared';
 
 export function baseOptions(): BaseLayoutProps {
@@ -19,7 +19,7 @@ export function baseOptions(): BaseLayoutProps {
       { text: 'Docs', url: '/', active: 'nested-url' },
       // One per shipped package. The sidebar's own tab switcher is the full list; this is the
       // shortcut for however few of them there are.
-      ...shippedPackages.map((pkg) => ({
+      ...packages.map((pkg) => ({
         text: pkg.slug,
         url: `/${pkg.slug}`,
         active: 'nested-url' as const,
