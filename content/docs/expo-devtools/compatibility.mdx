@@ -14,11 +14,11 @@ description: The versions this is built against, what it requires you to have in
 That row is what the package is **built and tested against** — the versions in its own dev
 dependencies and in the example app that exercises every tab.
 
-<Callout type="warn" title="SDK 57 is a real constraint, not just a tested version">
-  The package depends on `expo-clipboard@~57.0.1`, which resolves inside Expo SDK 57's version line
-  only. On another SDK your install will pull a `expo-clipboard` that does not match the rest of your
-  Expo packages. The peer ranges below are permissive enough not to stop you; this dependency is what
-  actually decides.
+<Callout type="info" title="Nothing here pins you to one SDK">
+  Every Expo package this needs is a peer dependency, so each resolves to the version your own SDK
+  ships. The row above is what it is built and tested against, not a range it refuses to run outside.
+  Until recently `expo-clipboard` was a direct dependency at `~57.0.1`, which did pin the package to
+  SDK 57 — it no longer does.
 </Callout>
 
 ## What you have to install
@@ -27,16 +27,22 @@ dependencies and in the example app that exercises every tab.
 | -------------------------------- | ------------------------------------------------------------ |
 | `react-native-safe-area-context` | The overlay and panel lay themselves out inside the safe area |
 | `react-native-webview`           | HTML and image response previews in the Network tab          |
+| `expo-clipboard`                 | Every Copy button, in every tab                              |
 
 Both are peer dependencies, so they come from your app rather than from this package:
 
 ```sh
-npx expo install @axonpack/expo-devtools react-native-safe-area-context react-native-webview
+npx expo install @axonpack/expo-devtools react-native-safe-area-context react-native-webview expo-clipboard
 ```
 
-Every peer range is currently `*`. That is deliberate — this package makes no claim about which
-React Native versions it works with beyond the row above — but it also means npm will not warn you
-when you are outside it. Treat the table, not the peer range, as the answer.
+Every peer range is `*`. That is deliberate: the point of a peer is that your SDK decides the
+version, and a narrower range here would fight it. It does mean npm will not warn you when you are
+outside what has been tested, so treat the table above, not the peer range, as the answer.
+
+Why `expo-clipboard` is a peer and not a dependency: as a dependency it had to name a version, and
+any version it named tied the package to one SDK line. React Native does still ship a built-in
+`Clipboard`, but it is deprecated, slated for removal, and warns through `console.warn` — which this
+package patches, so its own deprecation notice would appear in its own Console tab.
 
 ## Platforms
 
