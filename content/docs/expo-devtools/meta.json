@@ -21,7 +21,9 @@
     "production",
     "example-app",
     "---Reference---",
-    "reference"
+    "reference",
+    "---Releases---",
+    "changelog"
   ],
   "defaultOpen": true
 }

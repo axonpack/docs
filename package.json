@@ -10,7 +10,8 @@
     "start": "serve out",
     "lint": "oxlint src",
     "format": "oxlint src --fix",
-    "check-types": "next typegen && tsc --noEmit"
+    "check-types": "next typegen && tsc --noEmit",
+    "sync:changelog": "node scripts/sync-changelog.mjs"
   },
   "dependencies": {
     "fumadocs-core": "16.15.4",

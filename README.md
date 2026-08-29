@@ -135,6 +135,25 @@ that goes through a fumadocs component is already handled, and prefixing it agai
 `usePathname()` inside fumadocs, which strips the base path, so they point one level too high. It is
 not reachable from props — fixing it means replacing the popover.
 
+## The changelog
+
+`content/docs/expo-devtools/changelog.mdx` is **generated, not written**. It is rebuilt from the
+package's own `CHANGELOG.md` — which Changesets writes in the monorepo, a different repository from
+this one:
+
+```sh
+bun run sync:changelog
+```
+
+Run it after a release and commit the result. It is a committed file rather than a build-time fetch
+on purpose: a build that has to reach GitHub to render a page fails whenever GitHub does, and
+releases happen a few times a month, not a few times an hour.
+
+Release dates come from the **npm registry**. Changesets does not record them, and the git tags that
+would carry them are not reliably pushed — at the time of writing 7 of 11 tags exist only locally,
+including the tag for the latest release. That is also why each version links to npm rather than to a
+GitHub tag or release page: npm is the one destination guaranteed to exist for a published version.
+
 ## Conventions
 
 Borrowed from how Expo writes its own docs, because they hold up:
