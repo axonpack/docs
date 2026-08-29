@@ -11,14 +11,17 @@ nothing captured until you switch it on.
 npx expo install @axonpack/expo-devtools react-native-safe-area-context react-native-webview
 ```
 
-| Tab             | What it gives you                                                                        |
-| --------------- | ------------------------------------------------------------------------------------------ |
-| **Network**     | Every request, searchable, resendable, with connection throttling                        |
-| **Console**     | Every log, plus a `>` prompt that answers                                                |
-| **Performance** | Frame rate, memory, startup, and the moments the app froze                               |
-| **Storage**     | Every key you have saved — search it, edit it, import and export it                      |
-| **Crashes**     | JS errors, unhandled rejections, render errors and native exceptions, as readable reports |
-| **Debug**       | Tools that block or crash a thread on purpose                                            |
+| Tab                                           | What it gives you                                                                         |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **[Network](/expo-devtools/network)**         | Every request, searchable, resendable, with connection throttling                         |
+| **[Console](/expo-devtools/console)**         | Every log, plus a `>` prompt that answers                                                 |
+| **[Performance](/expo-devtools/performance)** | Frame rate, memory, startup, and the moments the app froze                                |
+| **[Storage](/expo-devtools/storage)**         | Every key you have saved — search it, edit it, import and export it                       |
+| **[Crashes](/expo-devtools/crash-reporting)** | JS errors, unhandled rejections, render errors and native exceptions, as readable reports |
+| **[Debug](/expo-devtools/debug)**             | Tools that block or crash a thread on purpose                                             |
+
+Two more guides cover things that are not tabs: [themes](/expo-devtools/themes), and
+[capturing inside an in-app browser](/expo-devtools/in-app-browsers).
 
 ![Network tab listing captured requests](/expo-devtools/screenshots/network-log.png)
 
@@ -27,7 +30,7 @@ npx expo install @axonpack/expo-devtools react-native-safe-area-context react-na
 - **One native module, on purpose.** It does the two things JavaScript cannot: block the main thread,
   and report the real process start time. Everything else is JS, so the package works in Expo Go with
   only a handful of readings dark.
-- **It depends on no storage library.** The Storage tab reads the stores *you* register, which is why
+- **It depends on no storage library.** The Storage tab reads the stores _you_ register, which is why
   adding this package cannot drag AsyncStorage or MMKV into your app.
 - **`init()` is the only gate.** Ship the code freely: until you call it, nothing is patched,
   observed or recorded, and the overlay draws nothing.
@@ -37,8 +40,34 @@ npx expo install @axonpack/expo-devtools react-native-safe-area-context react-na
 ## Where to go next
 
 <Cards>
-  <Card title="Installation" href="/expo-devtools/installation" description="One install command and two peer dependencies." />
-  <Card title="Quick start" href="/expo-devtools/quick-start" description="Create the client, mount the overlay, done." />
-  <Card title="Reference" href="/expo-devtools/reference" description="Every control and every option, field by field." />
-  <Card title="Leaving it in production" href="/expo-devtools/production" description="What ships, and what stays dark." />
+  <Card
+    title="Installation"
+    href="/expo-devtools/installation"
+    description="One install command and two peer dependencies."
+  />
+  <Card
+    title="Compatibility"
+    href="/expo-devtools/compatibility"
+    description="The versions this is built against, and what it pins you to."
+  />
+  <Card
+    title="Quick start"
+    href="/expo-devtools/quick-start"
+    description="Create the client, mount the overlay, done."
+  />
+  <Card
+    title="Reference"
+    href="/expo-devtools/reference"
+    description="Every control and every option, field by field."
+  />
+  <Card
+    title="Leaving it in production"
+    href="/expo-devtools/production"
+    description="What ships, and what stays dark."
+  />
+  <Card
+    title="Example app"
+    href="/expo-devtools/example-app"
+    description="A runnable app that exercises every tab."
+  />
 </Cards>
