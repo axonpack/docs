@@ -145,6 +145,10 @@ this one:
 bun run sync:changelog
 ```
 
+It also writes `src/lib/releases.generated.ts`, which is what the `<LatestRelease />` button on the
+package overview and the compatibility page read — so the version on a badge can never drift from the
+changelog it links to, because one command writes both.
+
 Run it after a release and commit the result. It is a committed file rather than a build-time fetch
 on purpose: a build that has to reach GitHub to render a page fails whenever GitHub does, and
 releases happen a few times a month, not a few times an hour.
