@@ -11,6 +11,7 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { findNeighbour } from 'fumadocs-core/page-tree';
 import { pageSourceUrl } from '@/lib/shared';
 
 export default async function Page(props: PageProps<'/[[...slug]]'>) {
@@ -20,9 +21,16 @@ export default async function Page(props: PageProps<'/[[...slug]]'>) {
 
   const MDX = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
+  // The footer renders whatever it is handed; it does not work its own neighbours out of the tree.
+  const neighbours = findNeighbour(source.getPageTree(), page.url);
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage
+      toc={page.data.toc}
+      full={page.data.full}
+      breadcrumb={{ enabled: true }}
+      footer={{ enabled: true, items: neighbours }}
+    >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
       <div className="flex flex-row gap-2 items-center border-b pb-6">
