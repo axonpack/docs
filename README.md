@@ -1,30 +1,34 @@
 # axonpack-docs
 
-The documentation site for the `@axonpack/*` libraries, at
-[`apps/docs`](https://github.com/axonpack/axonpack/tree/main/apps/docs).
+The documentation site for the `@axonpack/*` libraries, served at
+[axonpack.github.io/docs](https://axonpack.github.io/docs).
 
-[Next.js](https://nextjs.org) + [Fumadocs](https://fumadocs.dev), built as a **static export** and
-hosted on GitHub Pages. Pages are MDX under `content/docs`.
+[Next.js](https://nextjs.org) + [Fumadocs](https://fumadocs.dev), built as a **static export**. Pages
+are MDX under `content/docs`.
+
+## Where this repo lives
+
+This is `axonpack/docs`, a repository of its own. It is also mounted into the
+[axonpack monorepo](https://github.com/axonpack/axonpack) as a git submodule at `docs/`, beside the
+code it describes and alongside `marketing/`, which is mounted the same way.
+
+That mount is a convenience, not a coupling. **This project is self-contained** — its own lockfile,
+its own `node_modules`, its own oxlint config, no dependency on any workspace package over there — and
+it builds identically whether cloned on its own or checked out inside the monorepo.
+
+Two consequences of being a submodule, both the same ones `marketing/` already has:
+
+- A docs change is two commits: one here, and one in the monorepo to move the pointer.
+- The monorepo's root `bun install`, `format`, `lint` and `build` do not reach in here. Run them from
+  this directory.
 
 ## Running it
 
-From the **repo root**, so bun's workspace linking resolves:
+From **this** directory, not the monorepo root:
 
 ```sh
 bun install
 ```
-
-Then, from this directory:
-
-```sh
-bun run dev          # http://localhost:3000
-bun run build        # static export into ./out
-bun run start        # serve ./out, to check the export rather than the dev server
-bun run lint         # oxlint src
-bun run check-types  # next typegen && tsc --noEmit
-```
-
-`turbo run dev --filter=axonpack-docs` from the root does the same thing.
 
 ## One folder per package, everywhere
 
@@ -73,45 +77,40 @@ keeps its intent bullets on the plan page until the day it does.
 
 ## Deployment
 
-The site is served from the **organisation root**, `https://axonpack.github.io`. Only a repo named
-exactly `<org>.github.io` gets that URL — a project repo can only ever be served at
-`https://axonpack.github.io/<repo>`. So the site is built here and its output is pushed to
-`axonpack/axonpack.github.io`, which holds nothing but build output.
+`.github/workflows/deploy.yml` builds on every pull request and deploys to GitHub Pages on push to
+`main`, using this repository's own `GITHUB_TOKEN`. **There is no secret to configure and no
+credential to rotate** — which is the whole reason the site lives in the repo it is served from. A
+cross-repo push would need a deploy key or a token, and both were tried and thrown away.
 
-`.github/workflows/docs.yml` builds on every pull request that touches `apps/docs/**`, and on push to
-`main` force-pushes `apps/docs/out` to that repo. Its history is replaced on every deploy rather than
-appended to, so **nothing in that repo should ever be hand-edited** — the next deploy discards it.
+The only setup, once: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
 
-### One-time setup
+`public/.nojekyll` has to stay, or Pages runs Jekyll and drops every directory starting with an
+underscore — including `_next`.
 
-1. Create the repo `axonpack/axonpack.github.io`, public and empty.
-2. Generate a deploy key:
-   `ssh-keygen -t ed25519 -C axonpack-docs-deploy -f ./pages_deploy -N ""`
-3. In **axonpack.github.io** → Settings → Deploy keys → Add deploy key: paste `pages_deploy.pub` and
-   tick **Allow write access**.
-4. In **axonpack/axonpack** → Settings → Secrets and variables → Actions → New repository secret:
-   name `PAGES_DEPLOY_KEY`, value the contents of `pages_deploy` (the private half).
-5. In **axonpack.github.io** → Settings → Pages → Source: **Deploy from a branch**, `main` / `(root)`.
-6. Delete both local key files.
+### Why the routes sit at the site root
 
-`public/.nojekyll` is what makes step 5 work: without it Pages runs Jekyll, which ignores every
-directory starting with an underscore — including `_next`.
+GitHub Pages serves a project site under `/<repo>`, and this repo is named `docs`, so everything is
+already under `https://axonpack.github.io/docs`. The app's own routes are therefore at _its_ root —
+the landing page at `/`, a package at `/<slug>` — because a second `/docs` segment would only double
+the prefix:
 
-### Base paths
+```
+https://axonpack.github.io/docs/                          landing page
+https://axonpack.github.io/docs/overview/                 the project
+https://axonpack.github.io/docs/expo-devtools/            a package
+https://axonpack.github.io/docs/expo-devtools/network/    a page
+```
 
-A root site has no path prefix, so `NEXT_PUBLIC_BASE_PATH` is unset everywhere and every URL is
-root-relative. It stays wired up because the day the site moves under a subpath, that prefix has to
-reach **two** places and only one is automatic:
+`NEXT_PUBLIC_BASE_PATH` carries that prefix, set by the workflow from the repo name; local dev runs
+without it. **Two places consume it and only one is automatic:**
 
 - `next.config.mjs` passes it to `basePath`, which prefixes every route, link and asset.
 - `src/components/search.tsx` builds the search index URL from it by hand. Fumadocs reads its own base
   path from `import.meta.env.BASE_URL`, a Vite convention Next does not set, so without this the index
-  would be fetched from the wrong origin and every search would come back empty.
+  would be fetched from the domain root and every search would come back empty.
 
-Both are declared in `turbo.json`'s `build.env`, so a cached build is never reused across prefixes.
-
-**To move to a custom domain**, drop `NEXT_PUBLIC_SITE_URL` from the workflow and add
-`public/CNAME`. Nothing else changes.
+**To move to a custom domain**, drop both `NEXT_PUBLIC_*` variables from the workflow and add
+`public/CNAME`. The routes are already at the root, so nothing else changes.
 
 ## Conventions
 

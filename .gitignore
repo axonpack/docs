@@ -1,3 +1,5 @@
+node_modules
+
 # Content compiled by fumadocs-mdx at dev/build time.
 .source
 
@@ -5,6 +7,5 @@
 next-env.d.ts
 
 .next/
-
-*.tsbuildinfo
 out/
+*.tsbuildinfo

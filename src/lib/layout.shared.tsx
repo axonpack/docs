@@ -15,12 +15,12 @@ export function baseOptions(): BaseLayoutProps {
       url: '/',
     },
     links: [
-      { text: 'Docs', url: '/docs/overview', active: 'nested-url' },
+      { text: 'Docs', url: '/overview', active: 'nested-url' },
       // One per shipped package. The sidebar's own tab switcher is the full list; this is the
       // shortcut for however few of them there are.
       ...shippedPackages.map((pkg) => ({
         text: pkg.slug,
-        url: `/docs/${pkg.slug}`,
+        url: `/${pkg.slug}`,
         active: 'nested-url' as const,
       })),
     ],

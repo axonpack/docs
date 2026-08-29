@@ -14,7 +14,7 @@ There are two switches, and they do different jobs:
   is no way into the panel.
 
 `DEVTOOLS_ENABLED` is whatever condition you want, evaluated at runtime.
-`process.env.EXPO_PUBLIC_APP_ENV !== 'prod'` from the [Quick start](/docs/expo-devtools/quick-start) and
+`process.env.EXPO_PUBLIC_APP_ENV !== 'prod'` from the [Quick start](/expo-devtools/quick-start) and
 `__DEV__` are the two usual choices; anything else works too, including a value you fetch for a
 specific user.
 
@@ -23,7 +23,7 @@ specific user.
   enough. Guarding both is still worth doing — it keeps the component out of the render tree entirely.
 </Callout>
 
-That also settles the [Debug tab](/docs/expo-devtools/debug), whose buttons call straight into the native
+That also settles the [Debug tab](/expo-devtools/debug), whose buttons call straight into the native
 module and are **not** restricted to development builds. They live behind the panel, and the panel is
 unreachable without `init()`.
 
@@ -31,7 +31,7 @@ unreachable without `init()`.
 
 - **Crash reporting**, if you asked for it. `crash: { enableWhileDevtoolsDisabled: true }` installs the
   handlers when the client is constructed rather than at `init()`. It is the one subsystem meant to
-  survive into a release build — see [Crash reporting](/docs/expo-devtools/crash-reporting).
+  survive into a release build — see [Crash reporting](/expo-devtools/crash-reporting).
 - **The `>` prompt**, if you called `init()`. `console.repl` defaults to `true` and is not gated on
   `__DEV__`, so a build that calls `init()` gets a prompt that runs whatever is typed into it. Set
   `console: { repl: false }` for any build where that is not what you want.
@@ -39,6 +39,6 @@ unreachable without `init()`.
 ## Next step
 
 <Cards>
-  <Card title="Crash reporting" href="/docs/expo-devtools/crash-reporting" description="The subsystem that is meant to run in release." />
-  <Card title="Example app" href="/docs/expo-devtools/example-app" description="A worked configuration you can run." />
+  <Card title="Crash reporting" href="/expo-devtools/crash-reporting" description="The subsystem that is meant to run in release." />
+  <Card title="Example app" href="/expo-devtools/example-app" description="A worked configuration you can run." />
 </Cards>

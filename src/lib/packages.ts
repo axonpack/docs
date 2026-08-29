@@ -9,7 +9,7 @@ export type AxonpackPackage = {
   name: string;
   /**
    * The package's own segment, used identically in three places so they never drift:
-   * `content/docs/<slug>/`, the `/docs/<slug>` route, and `public/<slug>/` for its assets.
+   * `content/docs/<slug>/`, the `/<slug>` route, and `public/<slug>/` for its assets.
    */
   slug: string;
   status: PackageStatus;
@@ -50,7 +50,7 @@ export const shippedPackages = packages.filter((pkg) => pkg.status === 'shipped'
 
 /** A planned package has no docs folder yet, so it points at the roadmap instead. */
 export function packageHref(pkg: AxonpackPackage): string {
-  return pkg.status === 'shipped' ? `/docs/${pkg.slug}` : '/docs/overview/roadmap';
+  return pkg.status === 'shipped' ? `/${pkg.slug}` : '/overview/roadmap';
 }
 
 export function packageAsset(pkg: Pick<AxonpackPackage, 'slug'>, path: string): string {

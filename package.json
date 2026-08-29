@@ -27,7 +27,6 @@
     "@types/node": "^26.3.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
-    "linter": "*",
     "oxlint": "^1.77.0",
     "postcss": "^8.5.26",
     "serve": "^14.2.6",

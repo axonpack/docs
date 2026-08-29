@@ -16,7 +16,7 @@ import {
 import { useDocsSearch } from 'fumadocs-core/search/client';
 import { staticClient } from 'fumadocs-core/search/client/orama-static';
 import { usePathname } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { searchTags } from '@/lib/packages';
 
 // Empty on the current deployment, which serves from a domain root. It is built by hand anyway
@@ -27,10 +27,10 @@ const searchIndexUrl = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/api/search.js
 
 const tagValues = new Set(searchTags.map((tag) => tag.value));
 
-/** `/docs/expo-devtools/network` → `expo-devtools`. `usePathname` already excludes the base path. */
+/** `/expo-devtools/network` → `expo-devtools`. `usePathname` already excludes the base path. */
 function packageFromPathname(pathname: string): string | undefined {
-  const [, docs, slug] = pathname.split('/');
-  if (docs !== 'docs' || !slug) return undefined;
+  const [, slug] = pathname.split('/');
+  if (!slug) return undefined;
   return tagValues.has(slug) ? slug : undefined;
 }
 
@@ -40,10 +40,15 @@ export default function StaticSearchDialog(props: SharedProps) {
 
   // Opening search inside a package searches that package. Clearing the tag searches everything,
   // which is the right default only when you are not already reading one.
+  //
+  // Adjusted during render rather than in an effect: an effect would render once with the previous
+  // package's tag, then again with this one, and the first of those two renders would run a query.
   const [tag, setTag] = useState(currentPackage);
-  useEffect(() => {
+  const [tagFor, setTagFor] = useState(currentPackage);
+  if (tagFor !== currentPackage) {
+    setTagFor(currentPackage);
     setTag(currentPackage);
-  }, [currentPackage]);
+  }
 
   // `useDocsSearch` keys its effect on `client.deps`, which is a fresh array on every
   // `staticClient()` call — an unmemoized client re-runs the query on every render.
