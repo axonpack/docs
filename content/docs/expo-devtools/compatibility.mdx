@@ -1,0 +1,64 @@
+---
+title: Compatibility
+description: The versions this is built against, what it requires you to have installed, and which platforms it runs on.
+---
+
+## Versions
+
+| `@axonpack/expo-devtools` | Expo SDK | React Native | React |
+| ------------------------- | -------- | ------------ | ----- |
+| 2.4.x                     | 57       | 0.86         | 19.2  |
+
+That row is what the package is **built and tested against** — the versions in its own dev
+dependencies and in the example app that exercises every tab.
+
+<Callout type="warn" title="SDK 57 is a real constraint, not just a tested version">
+  The package depends on `expo-clipboard@~57.0.1`, which resolves inside Expo SDK 57's version line
+  only. On another SDK your install will pull a `expo-clipboard` that does not match the rest of your
+  Expo packages. The peer ranges below are permissive enough not to stop you; this dependency is what
+  actually decides.
+</Callout>
+
+## What you have to install
+
+| Package                          | Why                                                          |
+| -------------------------------- | ------------------------------------------------------------ |
+| `react-native-safe-area-context` | The overlay and panel lay themselves out inside the safe area |
+| `react-native-webview`           | HTML and image response previews in the Network tab          |
+
+Both are peer dependencies, so they come from your app rather than from this package:
+
+```sh
+npx expo install @axonpack/expo-devtools react-native-safe-area-context react-native-webview
+```
+
+Every peer range is currently `*`. That is deliberate — this package makes no claim about which
+React Native versions it works with beyond the row above — but it also means npm will not warn you
+when you are outside it. Treat the table, not the peer range, as the answer.
+
+## Platforms
+
+| Platform    | State                                                                     |
+| ----------- | ------------------------------------------------------------------------- |
+| **iOS**     | Full support, native module included                                      |
+| **Android** | Full support, native module included                                      |
+
+The native module is written once per platform and is loaded **optionally**, so the panel itself is
+plain JavaScript and never depends on it existing. That is what makes Expo Go work — see
+[What needs a development build](/expo-devtools/reference/development-build) for the handful of
+readings that go quiet there.
+
+## Storage libraries
+
+The Storage tab reads whatever you register, so its compatibility is really the adapters'. Versions
+the example app is built against:
+
+| Library                                       | Versions handled                                                     |
+| --------------------------------------------- | --------------------------------------------------------------------- |
+| `@react-native-async-storage/async-storage`   | v1, v2 and v3 — `getMany` and `multiGet` are both accepted           |
+| `react-native-mmkv`                           | v3 and v4 — `delete` and `remove` are both accepted                  |
+| `expo-secure-store`                           | SDK 57                                                               |
+| anything else                                 | via `defineStorageAdapter`, which duck-types nothing                 |
+
+MMKV and SecureStore carry native code of their own, so a store that needs a development build to
+exist also needs one to be inspectable. An adapter over an in-memory `Map` works in Expo Go.
