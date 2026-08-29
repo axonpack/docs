@@ -138,12 +138,22 @@ not reachable from props — fixing it means replacing the popover.
 ## The changelog
 
 `content/docs/expo-devtools/changelog.mdx` is **generated, not written**. It is rebuilt from the
-package's own `CHANGELOG.md` — which Changesets writes in the monorepo, a different repository from
-this one:
+package's own `CHANGELOG.md`, which Changesets writes in the monorepo:
 
 ```sh
 bun run sync:changelog
 ```
+
+**It reads the local file first.** This repository is mounted as a submodule at `docs/` inside the
+monorepo, so `../packages/@axonpack/expo-devtools/CHANGELOG.md` is on disk while you are working
+there — bump a version, run this, and the page updates immediately, with no wait for the change to
+reach `main`. Run outside the monorepo (a standalone clone, or CI) and it falls back to
+`raw.githubusercontent.com`. It prints which source it used.
+
+Only the release dates and the current version need the network. If npm is unreachable the page still
+generates: the dates are omitted, no version is claimed to be unpublished — the script cannot tell the
+difference between "absent from npm" and "could not ask" — and `releases.generated.ts` is left at its
+last good value rather than being blanked.
 
 It also writes `src/lib/releases.generated.ts`, which is what the `<LatestRelease />` button on the
 package overview and the compatibility page read — so the version on a badge can never drift from the
