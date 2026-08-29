@@ -20,10 +20,10 @@ bun run ios     # or: bun run android (full native build)
 - **Requests** fires GET, POST and DELETE, downloads an image and uploads one, across `fetch`,
   `XMLHttpRequest` and axios, so you can watch all three interception paths land in the same list. Its
   WebView sub-tab loads a real external site, whose own requests arrive tagged with their source.
-- **Console** covers every kind of output worth testing, grouped into levels, argument shapes (mixed
-  arguments, nested objects, arrays of objects, class instances, `Map` and `Set`, exotic primitives,
-  empty values) and edge cases (circular references, a throwing getter, an unhandled rejection, a
-  message repeated five times, a very long message, and a 600-entry flood).
+- **Console** covers every kind of output worth testing, in three groups. Levels; argument shapes —
+  mixed arguments, nested objects, arrays of objects, class instances, `Map` and `Set`, exotic
+  primitives, empty values; and edge cases — circular references, a throwing getter, an unhandled
+  rejection, a message repeated five times, a very long message, and a 600-entry flood.
 - **Performance** blocks the JS thread for 60 ms, 150 ms, 400 ms or three bursts in a row, runs a
   deliberately slow tap handler, records `mark` and `measure` pairs with and without `detail`, and
   allocates memory you can retain or release to make the heap chart move.

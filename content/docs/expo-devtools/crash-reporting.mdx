@@ -3,8 +3,8 @@ title: Crash reporting
 description: JS errors, unhandled rejections, render errors and native exceptions, turned into a report you can read on the device.
 ---
 
-The errors that end a session, or nearly do, turned into a report you can read on the device — and the
-one subsystem here meant to survive into a release build.
+The Crashes tab turns the errors that end a session, or nearly do, into a report you can read on the
+device. It is also the one subsystem here meant to survive into a release build.
 
 A report carries the message, the stack, the component stack where there is one, breadcrumbs, device
 details and the raw JSON. You can copy it as Markdown or JSON, or share the whole thing. Past reports
@@ -43,10 +43,11 @@ developer's concern, and the sheet there is in front of somebody using the app. 
 arrives, because React Native turns it into a native exception on its way to killing the process.
 
 <Callout type="info" title="Two sheets, and the wrong one in release is a real problem">
-  `popupDetail` defaults to `'auto'`: the full developer sheet — tabs, a stack tree, raw JSON, this
-  package's branding — when the devtools are enabled, and a compact notice — what broke, when, and
-  Share / Copy / Dismiss — when they are not. Set it explicitly for an internal build that ships the
-  crash sheet but not the panel and still wants the stack on screen.
+  `popupDetail` defaults to `'auto'`, which picks between two sheets. With the devtools enabled you get
+  the full developer sheet: tabs, a stack tree, raw JSON and this package's branding. With them
+  disabled you get a compact notice: what broke, when, and Share / Copy / Dismiss. Set it explicitly
+  for an internal build that ships the crash sheet but not the panel and still wants the stack on
+  screen.
 </Callout>
 
 If you ship crash reporting without the panel, mount the sheet yourself:

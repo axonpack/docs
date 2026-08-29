@@ -3,9 +3,11 @@ title: Network
 description: Every request the app makes, searchable, replayable and throttled, in-app browser traffic included.
 ---
 
-Every request lands as a row: the method, the status, how long it took, and when. Underneath, the
-short name and the full URL, plus badges for the kind of response, where the request came from, and
-how big it was. A request still in flight shows an amber **PENDING**, so you can tell "waiting" from
+The Network tab records every request your app makes and shows each one as a row.
+
+A row carries the method, the status, how long it took and when it started. Underneath sit the short
+name and the full URL, plus badges for the kind of response, where the request came from and how big
+it was. A request still in flight shows an amber **PENDING**, so you can tell "waiting" from
 "finished".
 
 Three capture paths feed one list — `fetch`, `XMLHttpRequest` (which is what catches axios and most

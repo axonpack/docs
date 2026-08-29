@@ -39,10 +39,10 @@ clear button: that icon means "clear the log" in the other three tabs, and it mu
 ## Import
 
 There is no filesystem module in this package and no dev server to upload to, so a snapshot comes back
-the way it left: as text. The sheet takes a paste (or reads the clipboard for you), then says what the
-file would do before anything is written — how many keys are new, how many would be overwritten, how
-many already hold exactly that value, and how many are skipped, with the reason: hidden by the
-blacklist, a type this store does not hold, or no value to write. A file exported from a different store
+the way it left: as text. The sheet takes a paste, or reads the clipboard for you.
+Before anything is written it reports what the file would do: how many keys are new, how many would be
+overwritten, how many already hold exactly that value, and how many are skipped. Each skip gives its
+reason — hidden by the blacklist, a type this store does not hold, or no value to write. A file exported from a different store
 is not refused, but it is called out.
 
 Only then does the Write button do anything. Keys are written one at a time so a failure names the key
