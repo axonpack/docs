@@ -116,8 +116,19 @@ string `src` when `images.unoptimized` is on — which it must be for a static e
 resolves against the domain root and 404s under `/docs`. A static import (or a markdown `![]()`,
 which fumadocs turns into one) is hashed into `/_next/static/media/` with the prefix applied.
 
-`src/lib/shared.ts` exports `withBasePath()` for the handful of APIs that insist on a string;
-`metadata.icons` is the only current caller.
+`src/lib/shared.ts` exports `withBasePath()` for the handful of APIs that insist on a string. Current
+callers: `metadata.icons`, and `getPageMarkdownUrl` in `src/lib/source.ts`, which feeds the page's
+"View as Markdown" and "Copy Markdown" actions. Fumadocs applies a base path of its own to that URL,
+but it reads `import.meta.env.BASE_URL` — a Vite convention Next does not set — so it is a no-op and
+ours is the one that counts.
+
+**`getPageImageUrl` is deliberately not prefixed.** It only ever reaches
+`metadata.openGraph.images`, which Next resolves against `metadataBase`, and that already carries the
+prefix. Prefixing it too yields `/docs/docs/og/...`.
+
+**Known gap:** the popover's _Open in ChatGPT_ / _Open in Claude_ items build their URL from
+`usePathname()` inside fumadocs, which strips the base path, so they point one level too high. It is
+not reachable from props — fixing it means replacing the popover.
 
 ## Conventions
 

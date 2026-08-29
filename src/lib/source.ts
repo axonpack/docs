@@ -1,6 +1,6 @@
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
-import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
+import { docsContentRoute, docsImageRoute, docsRoute, withBasePath } from './shared';
 import { defineDocs } from 'fumadocs-mdx/macro';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 
@@ -29,6 +29,9 @@ export function getPageImageUrl(page: (typeof source)['$inferPage']) {
 
   return {
     segments,
+    // Deliberately *not* prefixed: this is only ever handed to `metadata.openGraph.images`, and Next
+    // resolves that against `metadataBase`, whose own path already carries the prefix. Adding it here
+    // produces /docs/docs/og/...
     url: '/' + [page.locale, ...docsImageRoute.split('/'), ...segments].filter(Boolean).join('/'),
   };
 }
@@ -38,7 +41,7 @@ export function getPageMarkdownUrl(page: (typeof source)['$inferPage']) {
 
   return {
     segments,
-    url: '/' + [page.locale, ...docsContentRoute.split('/'), ...segments].filter(Boolean).join('/'),
+    url: withBasePath('/' + [page.locale, ...docsContentRoute.split('/'), ...segments].filter(Boolean).join('/')),
   };
 }
 

@@ -16,8 +16,22 @@ export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 export const withBasePath = (path: string) => `${basePath}${path}`;
 
+/** The project. Used for the nav link, which is about Axonpack as a whole. */
 export const gitConfig = {
   user: 'axonpack',
   repo: 'axonpack',
   branch: 'main',
 };
+
+/**
+ * The repository these pages live in — this one. Separate from `gitConfig` on purpose: a page's
+ * "open in GitHub" link has to resolve to the file, and the file is not in the monorepo.
+ */
+export const docsRepo = {
+  user: 'axonpack',
+  repo: 'docs',
+  branch: 'main',
+};
+
+export const pageSourceUrl = (path: string) =>
+  `https://github.com/${docsRepo.user}/${docsRepo.repo}/blob/${docsRepo.branch}/content/docs/${path}`;
