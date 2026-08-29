@@ -44,36 +44,34 @@ something belonging to it:
 | `src/lib/packages.ts`  | One entry per package — name, slug, status, summary |
 
 Nothing is shared between two libraries by accident, and a package can be removed by deleting one
-folder in each column. The only tab that is not a package is `content/docs/overview/`, which is what
-is true of the project as a whole.
+folder in each column. The one page that belongs to no package is `content/docs/index.mdx`, the
+introduction, which is the site's front page.
 
 ### Adding a library
 
-1. Add an entry to `src/lib/packages.ts` with `status: 'shipped'`. The landing page, the roadmap
-   page, the nav and the `<PackageCards />` component all read from there — no second list to update.
+1. Add an entry to `src/lib/packages.ts` with `status: 'shipped'`. The introduction, the nav and the
+   `<PackageCards />` component all read from there — no second list to update.
 2. Create `content/docs/<slug>/meta.json` with `"root": true`, a `title` of the full npm name, a
-   one-line `description` and an `icon`. That is what makes it a tab in the sidebar switcher.
+   one-line `description` and an `icon`, then list the folder in `content/docs/meta.json`.
 3. Create `content/docs/<slug>/index.mdx` as the package overview, and list every page in `meta.json`.
 4. Put its images under `public/<slug>/`.
 
 Copy the shape of `content/docs/expo-devtools/` — `---Get started---` / `---Guides---` /
 `---Shipping---` separators, then a `reference/` subfolder that collapses in the sidebar.
 
-A **planned** package gets an entry in `packages.ts` with `status: 'planned'` and a section on
-`content/docs/overview/roadmap.mdx`, and no tab. A tab that leads to one "not built yet" page is
-noise, and this mirrors the repo's own rule in `notes/plan.md`: a package that does not exist yet
-keeps its intent bullets on the plan page until the day it does.
+A **planned** package gets an entry in `packages.ts` with `status: 'planned'` and nothing else.
+`<PackageCards />` states it rather than linking it, and it gets no folder and no sidebar entry — a
+link that goes nowhere reads as a broken one.
 
 ## Where the rest lives
 
-| Path                      | What is in it                                                        |
-| ------------------------- | -------------------------------------------------------------------- |
-| `content/docs/meta.json`  | The tab order.                                                       |
-| `*/meta.json`             | The sidebar. **A page not listed there does not appear.**            |
-| `src/app/(home)/page.tsx` | The landing page.                                                    |
-| `src/app/docs/page.tsx`   | `/docs` itself, which bounces to the overview.                       |
-| `src/lib/shared.ts`       | Site name, GitHub coordinates, and the llms.txt / OG route prefixes. |
-| `src/components/mdx.tsx`  | Every component an `.mdx` page may use without importing it.         |
+| Path                     | What is in it                                                        |
+| ------------------------ | -------------------------------------------------------------------- |
+| `content/docs/meta.json` | The tab order.                                                       |
+| `*/meta.json`            | The sidebar. **A page not listed there does not appear.**            |
+| `content/docs/index.mdx` | The introduction, which is the site's front page.                    |
+| `src/lib/shared.ts`      | Site name, GitHub coordinates, and the llms.txt / OG route prefixes. |
+| `src/components/mdx.tsx` | Every component an `.mdx` page may use without importing it.         |
 
 ## Deployment
 
@@ -91,12 +89,11 @@ underscore — including `_next`.
 
 GitHub Pages serves a project site under `/<repo>`, and this repo is named `docs`, so everything is
 already under `https://axonpack.github.io/docs`. The app's own routes are therefore at _its_ root —
-the landing page at `/`, a package at `/<slug>` — because a second `/docs` segment would only double
+the introduction at `/`, a package at `/<slug>` — because a second `/docs` segment would only double
 the prefix:
 
 ```
-https://axonpack.github.io/docs/                          landing page
-https://axonpack.github.io/docs/overview/                 the project
+https://axonpack.github.io/docs/                          the introduction
 https://axonpack.github.io/docs/expo-devtools/            a package
 https://axonpack.github.io/docs/expo-devtools/network/    a page
 ```
@@ -111,6 +108,16 @@ without it. **Two places consume it and only one is automatic:**
 
 **To move to a custom domain**, drop both `NEXT_PUBLIC_*` variables from the workflow and add
 `public/CNAME`. The routes are already at the root, so nothing else changes.
+
+## Images
+
+**Import an image, never reference it by path.** `next/image` does not apply `basePath` to a plain
+string `src` when `images.unoptimized` is on — which it must be for a static export — so a string
+resolves against the domain root and 404s under `/docs`. A static import (or a markdown `![]()`,
+which fumadocs turns into one) is hashed into `/_next/static/media/` with the prefix applied.
+
+`src/lib/shared.ts` exports `withBasePath()` for the handful of APIs that insist on a string;
+`metadata.icons` is the only current caller.
 
 ## Conventions
 

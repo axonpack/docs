@@ -1,5 +1,8 @@
 import { source } from '@/lib/source';
 import { createFromSource } from 'fumadocs-core/search/server';
+import { packages } from '@/lib/packages';
+
+const packageSlugs = new Set(packages.map((pkg) => pkg.slug));
 
 export const revalidate = false;
 
@@ -22,8 +25,9 @@ export const { staticGET: GET } = createFromSource(source, {
       description: page.data.description,
       url: page.url,
       structuredData: await page.data.structuredData,
-      // The first slug segment is the root folder, which is the tab, which is the package.
-      tag: page.slugs[0],
+      // The first slug segment names the package, when the page belongs to one. The introduction
+      // sits at the site root and belongs to none, so it stays untagged.
+      tag: packageSlugs.has(page.slugs[0]) ? page.slugs[0] : undefined,
     };
   },
 });
