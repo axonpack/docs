@@ -1,5 +1,6 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Image from 'next/image';
+import logo from '../../public/logo.png';
 import { shippedPackages } from './packages';
 import { appName, gitConfig } from './shared';
 
@@ -8,14 +9,14 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: (
         <>
-          <Image src="/logo.png" alt="" width={22} height={22} className="rounded-sm" />
+          <Image src={logo} alt="" width={22} height={22} className="rounded-sm" />
           <span className="font-semibold">{appName}</span>
         </>
       ),
       url: '/',
     },
     links: [
-      { text: 'Docs', url: '/overview', active: 'nested-url' },
+      { text: 'Docs', url: '/', active: 'nested-url' },
       // One per shipped package. The sidebar's own tab switcher is the full list; this is the
       // shortcut for however few of them there are.
       ...shippedPackages.map((pkg) => ({

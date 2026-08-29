@@ -7,6 +7,15 @@ export const docsRoute = '/';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
 
+/**
+ * `next/image` does not apply `basePath` to a plain string `src` when `images.unoptimized` is on,
+ * and neither does `metadata.icons`. Prefer importing an asset so Next handles both; use this only
+ * where an API insists on a string.
+ */
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
+export const withBasePath = (path: string) => `${basePath}${path}`;
+
 export const gitConfig = {
   user: 'axonpack',
   repo: 'axonpack',

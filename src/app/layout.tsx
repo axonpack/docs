@@ -2,7 +2,7 @@ import { Provider } from '@/components/provider';
 import './global.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { appName, appTagline } from '@/lib/shared';
+import { appName, appTagline, withBasePath } from '@/lib/shared';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: { default: appName, template: `%s — ${appName}` },
   description: appTagline,
-  icons: { icon: '/logo.png' },
+  icons: { icon: withBasePath('/logo.png') },
 };
 
 export default function Layout({ children }: LayoutProps<'/'>) {
