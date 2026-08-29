@@ -2,7 +2,7 @@ import { Provider } from '@/components/provider';
 import './global.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { appName, appTagline, withBasePath } from '@/lib/shared';
+import { appLongName, appName, appTagline, withBasePath } from '@/lib/shared';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   // Set NEXT_PUBLIC_SITE_URL once the site has a domain; without it Next resolves OG image URLs
   // against localhost and warns on every build.
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
-  title: { default: appName, template: `%s — ${appName}` },
+  // Long name when the site names itself, short as a suffix on a page that already has a title.
+  title: { default: appLongName, template: `%s — ${appName}` },
   description: appTagline,
   icons: { icon: withBasePath('/logo.png') },
 };

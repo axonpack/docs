@@ -1,4 +1,11 @@
+/**
+ * Two names, deliberately. `appName` is what appears in chrome where space is tight and the reader
+ * already knows where they are — the nav, a browser tab suffix. `appLongName` is the full name, used
+ * where the site introduces itself to someone who has not seen it before: a shared link's title, an
+ * OG card, a search result.
+ */
 export const appName = 'Axonpack';
+export const appLongName = 'Axonpack Open Source';
 export const appTagline = 'Free, open-source foundation libraries for React Native and Expo apps.';
 
 // The docs tree is the site root: the repo is named `docs`, so GitHub Pages already serves
