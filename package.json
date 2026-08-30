@@ -1,7 +1,7 @@
 {
   "name": "axonpack-docs",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "description": "Documentation site for the @axonpack/* libraries",
   "license": "MIT",
   "scripts": {
